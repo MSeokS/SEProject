@@ -9,4 +9,10 @@ const db = new Client({
     port: process.env.DB_PORT,
 });
 
+/*Database Connect*/
+db.connect((err) => {
+    if(err) throw err;
+    console.log('DB is Connected');
+});
+
 module.exports = db;

@@ -10,10 +10,17 @@ const app = express();
 const port = 3000;
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended : true }));
 
-/*Database Connect*/
-db.connect((err) => {
-    if(err) throw err;
-    console.log('DB is Connected');
+
+
+
+
+
+
+
+
+app.listen(port, () => {
+    console.log("app listening on port ", port);
 });
-;
