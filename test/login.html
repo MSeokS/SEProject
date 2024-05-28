@@ -36,6 +36,7 @@
 		<input type="text" id="signinPW" name="signinPW" placeholder="Enter your password" /><br><br>
 	</div>
 	<button type="button" onclick="signInAjax()">Log in</button><br><br>
+    <button type="button" onclick="showid()">Id</button><br><br>
 </form>
 <script>
     function SignUpAjax() {
@@ -68,6 +69,17 @@
             type: "post",
             url: 'http://localhost:3000/api/signin',
             data: {id:id, password:password},
+            dataType: 'json',
+            success: function(res) {
+                window.alert(res);
+            }
+        });
+    }
+    function showid() {
+        $.ajax({
+            type: "post",
+            url: "http://localhost:3000/api/search",
+            data : {username:"abc", phone:"abc"},
             dataType: 'json',
             success: function(res) {
                 window.alert(res);

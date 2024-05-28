@@ -1,15 +1,15 @@
-/*NPM Modules*/
+/* NPM Modules */
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
-/*User Modules*/
+/* User Modules */
 const db = require('./modules/DBconfig');
 const { login, auth } = require('./modules/JWTauth');
 
-/*express config*/
+/* express config */
 const app = express();
 const port = 3000;
 
@@ -19,15 +19,14 @@ app.use(express.urlencoded({ extended : true }));
 app.use(express.static(__dirname + ''));
 app.use(cookieParser());
 
-/*Database Connect*/
+/* Database Connect */
 db.connect((err) => {
     if(err) throw err;
     console.log('DB is Connected');
 });
 
-/*SignUp*/
+/* SignUp */
 app.post('/api/signup', async (req, res, next) => {      // id 중복 확인
-    console.log('here');
     const {username, id, password, phone, department} = req.body;
     
     const query = {
@@ -55,7 +54,7 @@ app.post('/api/signup', async (req, res) => {      // id 생성
     return res.status(200).json({ message: 'Success create new account' });
 });
 
-/*SignIn*/
+/* SignIn */
 app.post('/api/signin', login, async (req, res) => {
     let {id, password} = req.body;
     
@@ -63,13 +62,11 @@ app.post('/api/signin', login, async (req, res) => {
         text: "SELECT * FROM users WHERE id = $1 AND password = $2",
         values: [id, password]
     };
-    console.log(query);
     const result = await db.query(query);
-
+    
     if(result.rows.length == 0) {
         return res.status(400).json({ message: 'Signin failed.' });
-    }
-    else {
+    } else {
         const payload = {
             id,
         }
@@ -86,14 +83,16 @@ app.post('/api/signin', login, async (req, res) => {
 /*Logout to develop*/
 app.get('/logout', (req, res) => {
     return res
-    .clearCookie('user')
+    .clearCookie('user', {path: '/'})
     .end();
 });
 
+/* Main page search */
+app.post('/api/search', auth, (req, res) => {
+});
 
-/*React routing*/
+/* React routing */
 app.use('*', (req, res) => {
-    console.log("*");
     res.sendFile(path.join(__dirname, '/test/login.html'));
 });
 

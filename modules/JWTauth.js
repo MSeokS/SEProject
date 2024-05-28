@@ -4,7 +4,6 @@ const path = require('path');
 require('dotenv').config({path:path.resolve(__dirname, '../.env')});
 
 login = async (req, res, next) => {
-    console.log('login');
     try {
         const payload = await jwt.verify(req.cookies.user, process.env.KEY);
         return res.status(400).json({
@@ -12,7 +11,6 @@ login = async (req, res, next) => {
         });
     }
     catch (error) {
-        console.log(error);
         next();
     }
 }
@@ -20,7 +18,7 @@ login = async (req, res, next) => {
 auth = async (req, res, next) => {
     try {
         const payload = await jwt.verify(req.cookies.user, process.env.KEY);
-        req.id = payload.id;
+        req.body.id = payload.id;
         return next();
     }
     catch (error) {
