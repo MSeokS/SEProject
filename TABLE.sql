@@ -4,9 +4,16 @@ CREATE TABLE users (
     id VARCHAR(10) PRIMARY KEY,
     password VARCHAR(50),
 
-    major VARCHAR(100),
     phone VARCHAR(10),
+    department VARCHAR(100),
 
+    perform INT,
+    commute INT,
+    prepare INT,
+    commitment INT,
+
+    position INT,
+    stack INT,
     profile TEXT
 );
 
