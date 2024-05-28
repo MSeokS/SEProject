@@ -1,0 +1,78 @@
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<form id="signup">
+	<h1>Sign up example</h1>
+	<div class="field">
+		<label for="id">ID:</label>
+		<input type="text" id="id" name="id" placeholder="Enter your fullname" /><br><br>
+	</div>
+	<div class="field">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" placeholder="Enter your address" /><br><br>
+	</div>
+	<div class="field">
+		<label for="pw">PW:</label>
+		<input type="text" id="password" name="password" placeholder="Enter your password" /><br><br>
+	</div>
+	<div class="field">
+		<label for="pwc">Department:</label>
+		<input type="text" id="department" name="department" placeholder="PW confirmation" /><br><br>
+	</div>
+	<div class="field">
+		<label for="pwc">phonenum:</label>
+		<input type="text" id="phone" name="phone" placeholder="PW confirmation" /><br><br>
+	</div>
+	<button type="button" onclick="SignUpAjax()">Submit</button><br><br>
+</form>
+<form id="singin">
+	<h1>Sign in example</h1>
+	<div class="field">
+		<label for="signinID">ID:</label>
+		<input type="text" id="signinID" name="signinID" placeholder="Enter your fullname" /><br><br>
+	</div>
+	<div class="field">
+		<label for="signinPW">PW:</label>
+		<input type="text" id="signinPW" name="signinPW" placeholder="Enter your password" /><br><br>
+	</div>
+	<button type="button" onclick="signInAjax()">Log in</button><br><br>
+</form>
+<script>
+    function SignUpAjax() {
+        var id = document.getElementById("id").value;
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var department = document.getElementById("department").value;
+        var phone = document.getElementById("phone").value;
+        document.getElementById("id").value = '';
+        document.getElementById("username").value = '';
+        document.getElementById("password").value = '';
+        document.getElementById("department").value = '';
+        document.getElementById("phone").value = '';
+        $.ajax({
+            type: "post",
+            url: 'http://localhost:3000/api/signup',
+            data: {username:username, id:id, password:password, department:department, phone:phone},
+            dataType: 'json',
+            success: function(res) {
+                window.alert(res);
+            }
+        });
+    }
+    function signInAjax() {
+        var id = document.getElementById("signinID").value;
+        var password = document.getElementById("signinPW").value;
+        document.getElementById("signinID").value = '';
+        document.getElementById("signinPW").value = '';
+        $.ajax({
+            type: "post",
+            url: 'http://localhost:3000/api/signin',
+            data: {id:id, password:password},
+            dataType: 'json',
+            success: function(res) {
+                window.alert(res);
+            }
+        });
+    }
+</script>
+            

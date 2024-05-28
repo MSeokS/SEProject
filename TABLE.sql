@@ -1,21 +1,50 @@
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    userid VARCHAR(50) UNIQUE,
+    username VARCHAR(50),
+    
+    id VARCHAR(10) PRIMARY KEY,
     password VARCHAR(50),
-    name VARCHAR(50),
-    student_id INT,
+
     major VARCHAR(100),
-    stack INT,
-    phone INT,
+    phone VARCHAR(10),
+
     profile TEXT
 );
 
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
-    userid VARCHAR(50) REFERENCES users(userid),
-    request INT,
-    applicant INT[50],
-    teams INT[50],
-    job_info TEXT,
-    stack INT
+    userid VARCHAR(10) REFERENCES users(id),
+
+    front_req INT,
+    back_req INT,
+    design_req INT,
+
+    post_text TEXT,
+    stack INT,
+
+    startdate TIMESTAMP,
+    enddate TIMESTAMP,
+    iseEnd Boolean
+);
+
+CREATE TABLE alarms (
+    id SERIAL PRIMARY KEY,
+    userid VARCHAR(10) REFERENCES users(id),
+    posts INT REFERENCES posts(id),
+    types INT,
+    user_param VARCHAR(10)
+);
+
+CREATE TABLE apply_post (
+    userid VARCHAR(10) REFERENCES users(id),
+    postid INT REFERENCES posts(id)
+);
+
+CREATE TABLE teams (
+    postid INT REFERENCES posts(id),
+    userid VARCHAR(10) REFERENCES users(id)
+);
+
+CREATE TABLE applicant(
+    postid INT REFERENCES posts(id),
+    userid VARCHAR(10) REFERENCES users(id)
 );
