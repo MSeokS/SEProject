@@ -53,5 +53,6 @@ CREATE TABLE teams (
 
 CREATE TABLE applicant(
     postid INT REFERENCES posts(id),
-    userid VARCHAR(10) REFERENCES users(id)
+    userid VARCHAR(10) REFERENCES users(id),
+    position INT
 );
