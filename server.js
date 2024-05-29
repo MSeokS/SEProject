@@ -91,13 +91,26 @@ app.get('/logout', (req, res) => {
 app.post('/api/search', auth, async (req, res) => {
     const { status, position, stack } = req.body;
 
-    position += "_req";
+    let positionStr;
+    switch (position) {
+        case 0:
+            positionStr = "front_req";
+            break;
+        case 1:
+            positionStr = "back_req";
+            break;
+        case 2:
+            positionStr = "design_req";
+            break;
+        default:
+            return res.status(400).json({ message: 'position error' });
+    }
 
     await db.query("UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date")
 
     const query = {
-        text: "SELECT * FROM posts WHERE $1 > 0 AND (stack | $2) > 0 AND isEnd = $3",
-        values: [position, stack, status]
+        text: "SELECT * FROM posts WHERE " + positionStr + " > 0 AND (stack | $1) > 0 AND isEnd = $2",
+        values: [stack, status]
     }
     const result = await db.query(query);
 
@@ -108,7 +121,7 @@ app.post('/api/search', auth, async (req, res) => {
 app.post('/api/post', auth, async (req, res) => {
     const { postid } = req.body;
 
-    await db.query("UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date")
+    await db.query("UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date");
 
     const query = {
         text: "SELECT * FROM posts WHERE postid = $1",
@@ -127,6 +140,19 @@ app.post('/api/post', auth, async (req, res) => {
     }
 
     return res.send(result.rows[0]);
+});
+
+/* Post apply */
+app.post('/api/apply', auth, async (req, res) => {
+    const { id, postid, position } = req.body;
+
+    const query = {
+        text: "INSERT INTO applicants VALUES ($1, $2, $3)",
+        values: [id, postid, position]
+    }
+    await db.query(query);
+
+    return res.status(200).json({ message: 'apply success.' });
 });
 
 /* React routing */
