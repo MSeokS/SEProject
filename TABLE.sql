@@ -28,8 +28,8 @@ CREATE TABLE posts (
     post_text TEXT,
     stack INT,
 
-    startdate TIMESTAMP,
-    enddate TIMESTAMP,
+    startdate DATE,
+    enddate DATE,
     iseEnd Boolean
 );
 

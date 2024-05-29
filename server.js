@@ -56,7 +56,7 @@ app.post('/api/signup', async (req, res) => {      // id 생성
 
 /* SignIn */
 app.post('/api/signin', login, async (req, res) => {
-    let {id, password} = req.body;
+    const {id, password} = req.body;
     
     const query = {
         text: "SELECT * FROM users WHERE id = $1 AND password = $2",
@@ -88,7 +88,45 @@ app.get('/logout', (req, res) => {
 });
 
 /* Main page search */
-app.post('/api/search', auth, (req, res) => {
+app.post('/api/search', auth, async (req, res) => {
+    const { status, position, stack } = req.body;
+
+    position += "_req";
+
+    await db.query("UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date")
+
+    const query = {
+        text: "SELECT * FROM posts WHERE $1 > 0 AND (stack | $2) > 0 AND isEnd = $3",
+        values: [position, stack, status]
+    }
+    const result = await db.query(query);
+
+    return res.send(result.rows)
+});
+
+/* Post page */
+app.post('/api/post', auth, async (req, res) => {
+    const { postid } = req.body;
+
+    await db.query("UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date")
+
+    const query = {
+        text: "SELECT * FROM posts WHERE postid = $1",
+        values: [postid]
+    }
+    const result = await db.query(query);
+
+    const now = new Date();
+    if (result.rows[0].isEnd == true) {
+        const userid_query = {
+            text: "SELECT userid FROM teams WHERE postid = $1",
+            values: [postid]
+        }
+        const teams = await db.query(userid_query);
+        return res.send(teams);
+    }
+
+    return res.send(result.rows[0]);
 });
 
 /* React routing */
