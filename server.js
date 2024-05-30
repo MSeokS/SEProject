@@ -129,18 +129,22 @@ app.post('/api/post', auth, async (req, res) => {
     }
     const result = await db.query(query);
 
-    const now = new Date();
-    if (result.rows[0].isEnd == true) {
-        const userid_query = {
-            text: "SELECT userid FROM teams WHERE postid = $1",
-            values: [postid]
-        }
-        const teams = await db.query(userid_query);
-        return res.send(teams);
-    }
-
     return res.send(result.rows[0]);
 });
+
+
+/* Evaluate Page */
+app.post('/api/end_post', auth, async (req, res) => {
+    const { postid, id } = req.body;
+
+    const userid_query = {
+         text: "SELECT u.* FROM users u JOIN teams t ON t.postid = $1 WHERE (u.id NOT IN (SELECT e.teamid FROM evaluate e WHERE e.userid = $2)) AND u.id != $2",
+         values: [postid, id]
+    }
+    const result = await db.query(userid_query);
+    return res.send(result);
+}
+
 
 /* Post apply */
 app.post('/api/apply', auth, async (req, res) => {
@@ -148,9 +152,15 @@ app.post('/api/apply', auth, async (req, res) => {
 
     const query = {
         text: "INSERT INTO applicants VALUES ($1, $2, $3)",
-        values: [id, postid, position]
-    }
+        values: [postid, id, position]
+    };
     await db.query(query);
+
+    const query2 = {
+        text: "INSERT INTO apply_post VALUES ($1, $2)",
+        values: [id, postid]
+    };
+    await db.qeury(query2);
 
     return res.status(200).json({ message: 'apply success.' });
 });
