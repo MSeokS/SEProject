@@ -165,6 +165,31 @@ app.post('/api/apply', auth, async (req, res) => {
     return res.status(200).json({ message: 'apply success.' });
 });
 
+/* Evaluate submit */
+app.post('/api/evaluate', auth, async (req, res) => {
+    const {userid, perform, commute, prepare, commitment} = req.body;
+
+    const query = {
+        text: "SELECT * FROM users WHERE userid = $1",
+        values: [userid]
+    }
+    const result = await db.query(query);
+
+    result[0].total += 1;
+    result[0].perform += perform;
+    result[0].commute += commute;
+    result[0].prepare += prepare;
+    result[0].commitment += commitment;
+
+    const query2 = {
+        text: "UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE userid = $6",
+        values: [total, preform, commute, prepare, commitment]
+    };
+    await db.query(query2);
+
+    return res.status(200).json({message: 'success evaluate."};
+}
+
 /* React routing */
 app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/test/login.html'));

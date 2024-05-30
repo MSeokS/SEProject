@@ -7,14 +7,14 @@ CREATE TABLE users (
     phone VARCHAR(30),
     department VARCHAR(100),
 
-    perform INT,
-    commute INT,
-    prepare INT,
-    commitment INT,
-    total INT,
+    perform INT DEFAULT 0,
+    commute INT DEFAULT 0,
+    prepare INT DEFAULT 0,
+    commitment INT DEFAULT 0,
+    total INT DEFAULT 0,
 
-    position INT,
-    stack INT,
+    position INT DEFAULT 0,
+    stack INT DEFAULT 0,
     profile TEXT
 );
 
