@@ -72,12 +72,62 @@ router.post('/api/account', auth, async (req, res) => {
     const query_result = await db.query(query);
     const user = query_result.rows;
 
-    console.log(user);
+    // console.log(user);
 
     res.status(200).json({ user: user[0] });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'account failed' });
+  }
+});
+
+router.post('/api/save', auth, async (req, res) => {
+  // const { username, password, phone, department } = req.body;
+  const id = req.body.id;
+  const filteredData = Object.fromEntries(
+    Object.entries(req.body).filter(
+      ([key, value]) => value !== undefined && key != 'id'
+    )
+  );
+
+  const setClause = Object.entries(filteredData)
+    .map(([key, value]) => `${key} = '${value}'`)
+    .join(', ');
+
+  console.log(setClause);
+
+  const query = `UPDATE users SET ${setClause} WHERE id = '${id}'`;
+  console.log(query);
+
+  try {
+    const query_result = await db.query(query);
+    console.log(query_result.rows);
+
+    res.status(200).json({ message: 'save success' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'save failed' });
+  }
+});
+
+router.post('/api/portfolio', auth, async (req, res) => {
+  const id = req.body.id;
+
+  const query = {
+    text: 'SELECT * FROM users WHERE id = $1',
+    values: [id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+    const user = query_result.rows;
+
+    // console.log(user);
+
+    res.status(200).json({ user: user[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'portfolio failed' });
   }
 });
 
