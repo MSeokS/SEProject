@@ -221,6 +221,209 @@ app.post('/api/posting', auth, async (req, res) => {
   }
 });
 
+app.post('/api/scrab_post', auth, async (req, res) => {
+  //   console.log(req.cookies);
+  //   console.log(req.body);
+  const id = req.body.id;
+
+  const query = {
+    text: 'SELECT * FROM apply_post WHERE userid = $1',
+    values: [id],
+  };
+
+  try {
+    const result = await db.query(query);
+
+    let postsId = [];
+    result.rows.map((post) => {
+      postsId.push(post.postid);
+    });
+
+    const ids = postsId.map(String).join(', ');
+    const query2 = {
+      text: `SELECT * FROM posts WHERE id IN (${ids})`,
+    };
+
+    const posts_result = await db.query(query2);
+
+    res.status(200).json({ posts: posts_result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'scrab_post failed' });
+  }
+});
+
+app.post('/api/profile', auth, async (req, res) => {
+  const id = req.body.id;
+
+  const query = {
+    text: 'SELECT perform, commute, prepare, commitment, total FROM users WHERE id = $1',
+    values: [id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+    const scores = query_result.rows[0];
+    const score =
+      scores.perform + scores.commute + scores.prepare + scores.commitment;
+    // const evaluate = parseFloat((score / (scores.total * 4)).toFixed(1));
+    // console.log(Math.round((score / (scores.total * 4)).toFixed(1)));
+    const evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
+
+    // console.log(evaluate);
+
+    res.status(200).json({ evaluate_average: evaluate });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'profile failed' });
+  }
+});
+
+app.post('/api/account', auth, async (req, res) => {
+  const id = req.body.id;
+
+  const query = {
+    text: 'SELECT * FROM users WHERE id = $1',
+    values: [id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+    const user = query_result.rows;
+
+    // console.log(user);
+
+    res.status(200).json({ user: user[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'account failed' });
+  }
+});
+
+app.post('/api/save', auth, async (req, res) => {
+  // const { username, password, phone, department } = req.body;
+  const id = req.body.id;
+  const filteredData = Object.fromEntries(
+    Object.entries(req.body).filter(
+      ([key, value]) => value !== undefined && key != 'id'
+    )
+  );
+
+  const setClause = Object.entries(filteredData)
+    .map(([key, value]) => `${key} = '${value}'`)
+    .join(', ');
+
+  console.log(setClause);
+
+  const query = `UPDATE users SET ${setClause} WHERE id = '${id}'`;
+  console.log(query);
+
+  try {
+    const query_result = await db.query(query);
+    console.log(query_result.rows);
+
+    res.status(200).json({ message: 'save success' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'save failed' });
+  }
+});
+
+app.post('/api/portfolio', auth, async (req, res) => {
+  const id = req.body.id;
+
+  const query = {
+    text: 'SELECT * FROM users WHERE id = $1',
+    values: [id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+    const user = query_result.rows;
+
+    // console.log(user);
+
+    res.status(200).json({ user: user[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'portfolio failed' });
+  }
+});
+
+app.post('/api/save_portfolio', auth, async (req, res) => {
+  const { id, position, stack, profile_text } = req.body;
+
+  const query = {
+    text: 'UPDATE users SET position = $1, stack = $2, profile = $3 WHERE id = $4',
+    values: [position, stack, profile_text, id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+
+    res.status(400).json({ message: 'save_portfolio success' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'save_portfolio failed' });
+  }
+});
+
+app.post('/api/mypost', auth, async (req, res) => {
+  const id = req.body.id;
+  const query = `SELECT * FROM posts WHERE userid='${id}'`;
+
+  try {
+    const query_result = await db.query(query);
+    const posts = query_result.rows;
+    console.log(posts);
+
+    res.status(200).json({ posts: query_result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'mypost failed' });
+  }
+});
+
+app.post('/api/applicant', auth, async (req, res) => {
+  const { id, postid } = req.body;
+
+  const query = `SELECT * FROM apply_post WHERE postid=${postid}`;
+
+  try {
+    const query_result = await db.query(query);
+    const usersString = query_result.rows
+      .map((item) => {
+        return `'${item.userid}'`;
+      })
+      .join(', ');
+    const usersQuery = `SELECT * FROM users WHERE id IN (${usersString})`;
+
+    const usersQuery_result = await db.query(usersQuery);
+    const users = usersQuery_result.rows;
+
+    res.status(200).json({ users: users });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'applicant failed' });
+  }
+});
+
+app.post('/api/apply_portfolio', auth, async (req, res) => {
+  const { id, userid } = req.body;
+
+  const query = `SELECT * FROM users WHERE id='${userid}'`;
+
+  try {
+    const query_result = await db.query(query);
+    // console.log(query_result.rows);
+
+    res.status(200).json({ users: query_result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'apply_portfolio failed' });
+  }
+});
+
 /* React routing */
 app.use('*', (req, res) => {
     res.sendFile(path.join(__dirname, '/react/build/index.html'));
