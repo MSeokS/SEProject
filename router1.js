@@ -131,4 +131,78 @@ router.post('/api/portfolio', auth, async (req, res) => {
   }
 });
 
+router.post('/api/save_portfolio', auth, async (req, res) => {
+  const { id, position, stack, profile_text } = req.body;
+
+  const query = {
+    text: 'UPDATE users SET position = $1, stack = $2, profile = $3 WHERE id = $4',
+    values: [position, stack, profile_text, id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+
+    res.status(400).json({ message: 'save_portfolio success' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'save_portfolio failed' });
+  }
+});
+
+router.post('/api/mypost', auth, async (req, res) => {
+  const id = req.body.id;
+  const query = `SELECT * FROM posts WHERE userid='${id}'`;
+
+  try {
+    const query_result = await db.query(query);
+    const posts = query_result.rows;
+    console.log(posts);
+
+    res.status(200).json({ posts: query_result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'mypost failed' });
+  }
+});
+
+router.post('/api/applicant', auth, async (req, res) => {
+  const { id, postid } = req.body;
+
+  const query = `SELECT * FROM apply_post WHERE postid=${postid}`;
+
+  try {
+    const query_result = await db.query(query);
+    const usersString = query_result.rows
+      .map((item) => {
+        return `'${item.userid}'`;
+      })
+      .join(', ');
+    const usersQuery = `SELECT * FROM users WHERE id IN (${usersString})`;
+
+    const usersQuery_result = await db.query(usersQuery);
+    const users = usersQuery_result.rows;
+
+    res.status(200).json({ users: users });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'applicant failed' });
+  }
+});
+
+router.post('/api/apply_portfolio', auth, async (req, res) => {
+  const { id, userid } = req.body;
+
+  const query = `SELECT * FROM users WHERE id='${userid}'`;
+
+  try {
+    const query_result = await db.query(query);
+    // console.log(query_result.rows);
+
+    res.status(200).json({ users: query_result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'apply_portfolio failed' });
+  }
+});
+
 module.exports = router;
