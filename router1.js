@@ -149,4 +149,20 @@ router.post('/api/save_portfoilo', auth, async (req, res) => {
   }
 });
 
+router.post('/api/mypost', auth, async (req, res) => {
+  const id = req.body.id;
+  const query = `SELECT * FROM posts WHERE userid='${id}'`;
+
+  try {
+    const query_result = await db.query(query);
+    const posts = query_result.rows;
+    console.log(posts);
+
+    res.status(200).json({ posts: query_result.rows });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'mypost failed' });
+  }
+});
+
 module.exports = router;
