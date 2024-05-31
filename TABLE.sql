@@ -4,7 +4,7 @@ CREATE TABLE users (
     id VARCHAR(10) PRIMARY KEY,
     password VARCHAR(50),
 
-    phone VARCHAR(30),
+    phone INT,
     department VARCHAR(100),
 
     perform INT DEFAULT 0,
@@ -21,6 +21,7 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     userid VARCHAR(10) REFERENCES users(id),
+    projectname VARCHAR(50),
 
     front_req INT,
     back_req INT,
