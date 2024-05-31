@@ -49,7 +49,9 @@ router.post('/api/profile', auth, async (req, res) => {
     const scores = query_result.rows[0];
     const score =
       scores.perform + scores.commute + scores.prepare + scores.commitment;
-    const evaluate = parseFloat((score / (scores.total * 4)).toFixed(1));
+    // const evaluate = parseFloat((score / (scores.total * 4)).toFixed(1));
+    // console.log(Math.round((score / (scores.total * 4)).toFixed(1)));
+    const evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
 
     // console.log(evaluate);
 
