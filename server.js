@@ -8,7 +8,6 @@ const cookieParser = require('cookie-parser');
 /* User Modules */
 const db = require('./modules/DBconfig');
 const { login, auth } = require('./modules/JWTauth');
-const router1 = require('./router1');
 
 /* express config */
 const app = express();
@@ -49,7 +48,7 @@ app.post('/api/signup', async (req, res) => {
   const { username, id, password, department, phone } = req.body;
 
   const query = {
-    text: 'INSERT INTO users VALUES ($1, $2, $3, $4, $5)',
+    text: 'INSERT INTO users (username, id, password, phone, department) VALUES ($1, $2, $3, $4, $5)',
     values: [username, id, password, phone, department],
   };
   const result = await db.query(query);
@@ -105,7 +104,7 @@ app.post('/api/search', auth, async (req, res) => {
   }
 
   await db.query(
-    'UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date'
+    'UPDATE posts SET isEnd = true WHERE enddate < NOW()::Date'
   );
 
   const query = {
@@ -122,10 +121,10 @@ app.post('/api/search', auth, async (req, res) => {
 
 /* Post page */
 app.post('/api/post', auth, async (req, res) => {
-  const { postid } = req.body;
+  const { postid, id } = req.body;
 
   await db.query(
-    'UPDATE * FROM posts SET isend = true WHERE enddate < NOW()::Date'
+    'UPDATE posts SET isEnd = true WHERE enddate < NOW()::Date'
   );
 
   const query = {
@@ -133,6 +132,14 @@ app.post('/api/post', auth, async (req, res) => {
     values: [postid],
   };
   const result = await db.query(query);
+
+  const query2 = {
+    text: "SELECT 1 FROM teams WHERE postid = $1 AND userid = $2",
+    values: [postid, id]
+  };
+  isAttend = await db.query(query2);
+
+  result.rows[0].isAttend = isAttend.rows.length > 0;
 
   return res.send(result.rows[0]);
 });
@@ -163,7 +170,7 @@ app.post('/api/apply', auth, async (req, res) => {
     text: 'INSERT INTO apply_post VALUES ($1, $2)',
     values: [id, postid],
   };
-  await db.qeury(query2);
+  await db.query(query2);
 
   return res.status(200).json({ message: 'apply success.' });
 });
@@ -172,58 +179,52 @@ app.post('/api/apply', auth, async (req, res) => {
 app.post('/api/evaluate', auth, async (req, res) => {
   const { userid, perform, commute, prepare, commitment } = req.body;
 
-  const query = {
-    text: 'SELECT * FROM users WHERE userid = $1',
-    values: [userid],
-  };
-  const result = await db.query(query);
+  try {
+    const query = {
+      text: 'SELECT * FROM users WHERE userid = $1',
+      values: [userid],
+    };
+    const result = await db.query(query);
+  
+    result.rows[0].total += 1;
+    result.rows[0].perform += perform;
+    result.rows[0].commute += commute;
+    result.rows[0].prepare += prepare;
+    result.rows[0].commitment += commitment;
 
-  result[0].total += 1;
-  result[0].perform += perform;
-  result[0].commute += commute;
-  result[0].prepare += prepare;
-  result[0].commitment += commitment;
+    const query2 = {
+      text: 'UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE userid = $6',
+      values: [total, perform, commute, prepare, commitment],
+    };
+    await db.query(query2);
 
-  const query2 = {
-    text: 'UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE userid = $6',
-    values: [total, preform, commute, prepare, commitment],
-  };
-  await db.query(query2);
-
-  return res.status(200).json({ message: 'success evaluate.' });
+    return res.status(200).json({ message: 'evaluation success.' });
+  } catch {
+    return res.status(400).json({ message: 'evaluation failed.' });
+  }
 });
 
-/* Evaluate submit */
-app.post('/api/evaluate', auth, async (req, res) => {
-  const { userid, perform, commute, prepare, commitment } = req.body;
+/* Posting */
+app.post('/api/posting', auth, async (req, res) => {
+  const { id, projectname, position, front_req, back_req, design_req, stack, location, post_text } = req.body;
 
-  const query = {
-    text: 'SELECT * FROM users WHERE userid = $1',
-    values: [userid],
-  };
-  const result = await db.query(query);
+  try {
+    const query = {
+      text: "INSERT INTO posts (userid, projectname, front_req, back_req, design_req, post_text, stack, location, startdate, enddate, isEnd) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW()::Date, $9, false]",
+      values: [id, projectname, front_req, back_req, design_req, post_text, stack, location, enddate]
+    }
+    await db.query(query);
 
-  result[0].total += 1;
-  result[0].perform += perform;
-  result[0].commute += commute;
-  result[0].prepare += prepare;
-  result[0].commitment += commitment;
-
-  const query2 = {
-    text: 'UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE userid = $6',
-    values: [total, preform, commute, prepare, commitment],
-  };
-  await db.query(query2);
-
-  return res.status(200).json({ message: 'success evaluate.' });
+    return res.status(200).json({ message: 'posting success' });
+  } catch (err) {
+    return res.status(400).json({ message: 'posting failed' });
+  }
 });
 
-app.use('/', router1);
-
-// /* React routing */
-// // app.use('*', (req, res) => {
-// //     res.sendFile(path.join(__dirname, '/test/login.html'));
-// // });
+/* React routing */
+app.use('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/react/build/index.html'));
+});
 
 app.listen(port, () => {
   console.log('app listening on port ', port);
