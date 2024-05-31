@@ -131,4 +131,22 @@ router.post('/api/portfolio', auth, async (req, res) => {
   }
 });
 
+router.post('/api/save_portfoilo', auth, async (req, res) => {
+  const { id, position, stack, profile_text } = req.body;
+
+  const query = {
+    text: 'UPDATE users SET position = $1, stack = $2, profile = $3 WHERE id = $4',
+    values: [position, stack, profile_text, id],
+  };
+
+  try {
+    const query_result = await db.query(query);
+
+    res.status(400).json({ message: 'save_portfolio success' });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ message: 'save_portfolio failed' });
+  }
+});
+
 module.exports = router;
