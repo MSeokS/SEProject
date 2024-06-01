@@ -18,6 +18,7 @@
   },
   "scripts": {
     "start": "pm2 start server.js -i max",
+    "stop": "pm2 stop all",
     "nodemon": "nodemon server.js"
   },
   "repository": {

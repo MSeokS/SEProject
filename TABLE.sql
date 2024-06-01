@@ -46,7 +46,7 @@ CREATE TABLE alarms (
 
 CREATE TABLE apply_post (
     userid VARCHAR(10) REFERENCES users(id),
-    postid INT REFERENCES posts(id),
+    postid INT REFERENCES posts(id)
 );
 
 CREATE TABLE teams (

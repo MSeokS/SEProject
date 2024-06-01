@@ -431,7 +431,7 @@ app.post('/api/apply_portfolio', auth, async (req, res) => {
 
 /* React routing */
 app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/react/build/index.html'));
+    res.sendFile(path.join(__dirname, '/test/page.html'));
 });
 
 app.listen(port, () => {
