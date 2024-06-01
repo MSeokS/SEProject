@@ -4,7 +4,7 @@ CREATE TABLE users (
     id VARCHAR(10) PRIMARY KEY,
     password VARCHAR(50),
 
-    phone INT,
+    phone VARCHAR(15),
     department VARCHAR(100),
 
     perform INT DEFAULT 0,
