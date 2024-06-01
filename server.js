@@ -137,7 +137,7 @@ app.post('/api/post', auth, async (req, res) => {
   );
 
   const query = {
-    text: 'SELECT * FROM posts WHERE postid = $1',
+    text: 'SELECT * FROM posts WHERE id = $1',
     values: [postid],
   };
   const result = await db.query(query);
@@ -169,17 +169,37 @@ app.post('/api/end_post', auth, async (req, res) => {
 app.post('/api/apply', auth, async (req, res) => {
   const { id, postid, position } = req.body;
 
-  const query = {
-    text: 'INSERT INTO applicants VALUES ($1, $2, $3)',
-    values: [postid, id, position],
-  };
-  await db.query(query);
+//  const query = {
+//    text: 'INSERT INTO applicant VALUES ($1, $2, $3)',
+//    values: [postid, id, position],
+//  };
+//  await db.query(query);
 
   const query2 = {
     text: 'INSERT INTO apply_post VALUES ($1, $2)',
     values: [id, postid],
   };
   await db.query(query2);
+
+  switch (position) {
+    case "Front-end":
+      positionStr = 'front_req';
+      break;
+    case "Back-end":
+      positionStr = 'back_req';
+      break;
+    case "Designer":
+      positionStr = 'design_req';
+      break;
+    default:
+      return res.status(400).json({ message: 'position error' });
+  }
+
+  const query3 = {
+      text: "UPDATE posts SET " + positionStr + " = " + positionStr + " - 1 WHERE id = $1",
+      values: [postid]
+  };
+  await db.query(query3);
 
   return res.status(200).json({ message: 'apply success.' });
 });
@@ -190,7 +210,7 @@ app.post('/api/evaluate', auth, async (req, res) => {
 
   try {
     const query = {
-      text: 'SELECT * FROM users WHERE userid = $1',
+      text: 'SELECT * FROM users WHERE id = $1',
       values: [userid],
     };
     const result = await db.query(query);
@@ -199,10 +219,10 @@ app.post('/api/evaluate', auth, async (req, res) => {
     result.rows[0].perform += perform;
     result.rows[0].commute += commute;
     result.rows[0].prepare += prepare;
-        result.rows[0].commitment += commitment;
-1
+    result.rows[0].commitment += commitment;
+
     const query2 = {
-      text: 'UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE userid = $6',
+      text: 'UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE id = $6',
       values: [total, perform, commute, prepare, commitment],
     };
     await db.query(query2);
