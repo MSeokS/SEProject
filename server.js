@@ -17,7 +17,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(__dirname + ''));
+app.use(express.static(__dirname + '/my-app/build/'));
 app.use(cookieParser());
 
 /* Database Connect */
@@ -78,8 +78,7 @@ app.post('/api/signin', login, async (req, res) => {
           return res.status(400).json({ message: 'token create failed.' });
       }
       else{
-          res.cookie('user', token, { maxAge: 30 * 60 * 1000 }).end();
-          return res.status(200).json({ message: 'signin success' });
+          return res.status(200).json({ token:token, message: 'signin success' });
       }
     });
   }
@@ -263,7 +262,7 @@ app.post('/api/profile', auth, async (req, res) => {
   const id = req.body.id;
 
   const query = {
-    text: 'SELECT perform, commute, prepare, commitment, total FROM users WHERE id = $1',
+    text: 'SELECT perform, commute, prepare, commitment, total, username, department FROM users WHERE id = $1',
     values: [id],
   };
 
@@ -278,7 +277,7 @@ app.post('/api/profile', auth, async (req, res) => {
 
     // console.log(evaluate);
 
-    res.status(200).json(evaluate);
+    res.status(200).json({username: scores.username, id:id, department: scores.department,  evaluate_average:evaluate});
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'profile failed' });
@@ -432,7 +431,7 @@ app.post('/api/apply_portfolio', auth, async (req, res) => {
 
 /* React routing */
 app.use('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/test/page.html'));
+    res.sendFile(path.join(__dirname, '/my-app/build/index.html'));
 });
 
 app.listen(port, () => {
