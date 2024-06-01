@@ -78,6 +78,7 @@ app.post('/api/signin', login, async (req, res) => {
           return res.status(400).json({ message: 'token create failed.' });
       }
       else{
+          res.cookie('user', token, { maxAge: 30 * 60 * 1000, httpOnly: true });
           return res.status(200).json({ token:token, message: 'signin success' });
       }
     });
