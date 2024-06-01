@@ -95,13 +95,13 @@ app.post('/api/search', auth, async (req, res) => {
 
   let positionStr;
   switch (position) {
-    case 0:
+    case "Front-end":
       positionStr = 'front_req';
       break;
-    case 1:
+    case "Back-end":
       positionStr = 'back_req';
       break;
-    case 2:
+    case "Designer":
       positionStr = 'design_req';
       break;
     default:
@@ -211,7 +211,7 @@ app.post('/api/evaluate', auth, async (req, res) => {
 
 /* Posting */
 app.post('/api/posting', auth, async (req, res) => {
-  const { id, projectname, position, front_req, back_req, design_req, stack, location, post_text } = req.body;
+  const { id, projectname, front_req, back_req, design_req, stack, location, post_text } = req.body;
 
   try {
     const query = {
