@@ -235,13 +235,13 @@ app.post('/api/evaluate', auth, async (req, res) => {
 
 /* Posting */
 app.post('/api/posting', auth, async (req, res) => {
-  const { id, projectname, front_req, back_req, design_req, stack, location, post_text, enddate_str } = req.body;
+  const { id, projectname, front_req, back_req, design_req, stack, location, post_text, enddate } = req.body;
 
-  const enddate = parse(enddate_str, 'yyyyMMdd', new Date());
+  const enddate_date = parse(enddate, 'yyyyMMdd', new Date());
   try {
     const query = {
       text: "INSERT INTO posts (userid, projectname, front_req, back_req, design_req, post_text, stack, location, startdate, enddate, isEnd) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW()::Date, $9, false)",
-      values: [id, projectname, front_req, back_req, design_req, post_text, stack, location, enddate]
+      values: [id, projectname, front_req, back_req, design_req, post_text, stack, location, enddate_date]
     }
     await db.query(query);  
     return res.status(200).json({ message: 'posting success' });
