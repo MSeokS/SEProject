@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
-const { parse } = require('data-fns');
+const { parse } = require('date-fns');
 
 /* User Modules */
 const db = require('./modules/DBconfig');
@@ -61,7 +61,7 @@ app.post('/api/signup', async (req, res) => {
 });
 
 /* SignIn */
-app.post('/api/signin', login, async (req, res) => {
+app.post('/api/signin', async (req, res) => {
   const { id, password } = req.body;
 
   const query = {
@@ -81,7 +81,7 @@ app.post('/api/signin', login, async (req, res) => {
           return res.status(400).json({ message: 'token create failed.' });
       }
       else{
-          res.cookie('user', token, { maxAge: 30 * 60 * 1000, httpOnly: true, secure: true, sameSite: 'None' });
+          res.cookie('user', token, { maxAge: 30 * 60 * 1000, httpOnly: false, secure: true, sameSite: 'None' });
           return res.status(200).json({ token:token, message: 'signin success' });
       }
     });
@@ -199,8 +199,8 @@ app.post('/api/evaluate', auth, async (req, res) => {
     result.rows[0].perform += perform;
     result.rows[0].commute += commute;
     result.rows[0].prepare += prepare;
-    result.rows[0].commitment += commitment;
-
+        result.rows[0].commitment += commitment;
+1
     const query2 = {
       text: 'UPDATE users SET total = $1, perform = $2, commute = $3, prepare = $4, commitment = $5 WHERE userid = $6',
       values: [total, perform, commute, prepare, commitment],
@@ -220,10 +220,10 @@ app.post('/api/posting', auth, async (req, res) => {
   const enddate = parse(enddate_str, 'yyyyMMdd', new Date());
   try {
     const query = {
-      text: "INSERT INTO posts (userid, projectname, front_req, back_req, design_req, post_text, stack, location, startdate, enddate, isEnd) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW()::Date, $9, false]",
+      text: "INSERT INTO posts (userid, projectname, front_req, back_req, design_req, post_text, stack, location, startdate, enddate, isEnd) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW()::Date, $9, false)",
       values: [id, projectname, front_req, back_req, design_req, post_text, stack, location, enddate]
     }
-    await db.query(query);
+    await db.query(query);  
     return res.status(200).json({ message: 'posting success' });
   } catch (err) {
     return res.status(400).json({ message: 'posting failed' });
@@ -277,7 +277,9 @@ app.post('/api/profile', auth, async (req, res) => {
       scores.perform + scores.commute + scores.prepare + scores.commitment;
     // const evaluate = parseFloat((score / (scores.total * 4)).toFixed(1));
     // console.log(Math.round((score / (scores.total * 4)).toFixed(1)));
-    const evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
+    if (scores.total == 0) {
+        evaluate = 50;
+    } else const evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
 
     // console.log(evaluate);
 

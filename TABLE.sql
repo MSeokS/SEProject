@@ -33,7 +33,7 @@ CREATE TABLE posts (
 
     startdate DATE,
     enddate DATE,
-    iseEnd Boolean
+    isEnd Boolean
 );
 
 CREATE TABLE alarms (
