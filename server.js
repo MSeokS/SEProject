@@ -73,8 +73,13 @@ app.post('/api/signin', login, async (req, res) => {
       id,
     };
     jwt.sign(payload, process.env.KEY, { expiresIn: 3600 }, (err, token) => {
-      if (err) throw err;
-      else return res.cookie('user', token, { maxAge: 30 * 60 * 1000 }).end();
+      if (err) {
+          return res.status(400).json({ message: 'token create failed.' });
+      }
+      else{
+          res.cookie('user', token, { maxAge: 30 * 60 * 1000 }).end();
+          return res.status(200).json({ message: 'signin success' });
+      }
     });
   }
 });
@@ -116,7 +121,7 @@ app.post('/api/search', auth, async (req, res) => {
   };
   const result = await db.query(query);
 
-  return res.send(result.rows);
+  return res.status(200).json(result.rows);
 });
 
 /* Post page */
@@ -141,7 +146,7 @@ app.post('/api/post', auth, async (req, res) => {
 
   result.rows[0].isAttend = isAttend.rows.length > 0;
 
-  return res.send(result.rows[0]);
+  return res.status(200).json(result.rows[0]);
 });
 
 /* Evaluate Page */
@@ -153,7 +158,7 @@ app.post('/api/end_post', auth, async (req, res) => {
     values: [postid, id],
   };
   const result = await db.query(userid_query);
-  return res.send(result);
+  return res.status(200).json(result);
 });
 
 /* Post apply */
@@ -246,7 +251,7 @@ app.post('/api/scrab_post', auth, async (req, res) => {
 
     const posts_result = await db.query(query2);
 
-    res.status(200).json({ posts: posts_result.rows });
+    res.status(200).json(posts_result.rows);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'scrab_post failed' });
@@ -272,7 +277,7 @@ app.post('/api/profile', auth, async (req, res) => {
 
     // console.log(evaluate);
 
-    res.status(200).json({ evaluate_average: evaluate });
+    res.status(200).json(evaluate);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'profile failed' });
@@ -293,7 +298,7 @@ app.post('/api/account', auth, async (req, res) => {
 
     // console.log(user);
 
-    res.status(200).json({ user: user[0] });
+    res.status(200).json(user[0]);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'account failed' });
@@ -343,7 +348,7 @@ app.post('/api/portfolio', auth, async (req, res) => {
 
     // console.log(user);
 
-    res.status(200).json({ user: user[0] });
+    res.status(200).json(user[0]);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'portfolio failed' });
@@ -377,7 +382,7 @@ app.post('/api/mypost', auth, async (req, res) => {
     const posts = query_result.rows;
     console.log(posts);
 
-    res.status(200).json({ posts: query_result.rows });
+    res.status(200).json(query_result.rows);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'mypost failed' });
@@ -401,7 +406,7 @@ app.post('/api/applicant', auth, async (req, res) => {
     const usersQuery_result = await db.query(usersQuery);
     const users = usersQuery_result.rows;
 
-    res.status(200).json({ users: users });
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'applicant failed' });
@@ -417,7 +422,7 @@ app.post('/api/apply_portfolio', auth, async (req, res) => {
     const query_result = await db.query(query);
     // console.log(query_result.rows);
 
-    res.status(200).json({ users: query_result.rows[0] });
+    res.status(200).json(query_result.rows[0]);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'apply_portfolio failed' });
