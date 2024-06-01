@@ -57,7 +57,7 @@ CREATE TABLE teams (
 CREATE TABLE applicant(
     postid INT REFERENCES posts(id),
     userid VARCHAR(10) REFERENCES users(id),
-    position INT
+    position VARCHAR(50)
 );
 
 CREATE TABLE evalute(
