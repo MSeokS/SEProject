@@ -172,17 +172,17 @@ app.post('/api/end_post', auth, async (req, res) => {
 app.post('/api/apply', auth, async (req, res) => {
   const { id, postid, position } = req.body;
 
-  //  const query = {
-  //    text: 'INSERT INTO applicant VALUES ($1, $2, $3)',
-  //    values: [postid, id, position],
-  //  };
-  //  await db.query(query);
+  const query = {
+    text: 'INSERT INTO applicant VALUES ($1, $2, $3)',
+    values: [postid, id, position],
+  };
+  await db.query(query);
 
   const query2 = {
     text: 'INSERT INTO apply_post VALUES ($1, $2)',
     values: [id, postid],
   };
-  await db.query(query2);
+/*  await db.query(query2);
 
   switch (position) {
     case 'Front-end':
@@ -208,8 +208,9 @@ app.post('/api/apply', auth, async (req, res) => {
     values: [postid],
   };
   await db.query(query3);
-
+*/
   return res.status(200).json({ message: 'apply success.' });
+
 });
 
 /* Evaluate submit */
@@ -327,7 +328,7 @@ app.post('/api/profile', auth, async (req, res) => {
     // console.log(Math.round((score / (scores.total * 4)).toFixed(1)));
     if (scores.total == 0) {
       evaluate = 50;
-    } else evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
+    } else evaluate = Math.round((score / (scores.total * 4)).toFixed(1)) * 20;
 
     // console.log(evaluate);
 
