@@ -297,17 +297,17 @@ app.post('/api/scrab_post', auth, async (req, res) => {
     });
 
     if (postsId.length == 0) {
-      res.status(200).json({ posts: null });
+      res.status(200).json({ message: 'NO post...' });
+    } else {
+      const ids = postsId.map(String).join(', ');
+      const query2 = {
+        text: `SELECT * FROM posts WHERE id IN (${ids})`,
+      };
+
+      const posts_result = await db.query(query2);
+
+      res.status(200).json(posts_result.rows);
     }
-
-    const ids = postsId.map(String).join(', ');
-    const query2 = {
-      text: `SELECT * FROM posts WHERE id IN (${ids})`,
-    };
-
-    const posts_result = await db.query(query2);
-
-    res.status(200).json(posts_result.rows);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'scrab_post failed' });
@@ -522,20 +522,20 @@ app.post('/api/postend', auth, async (req, res) => {
 });
 
 app.post('/api/postdelete', auth, async (req, res) => {
-    const {id, postid } = req.body;
+  const { id, postid } = req.body;
 
-    const query = {
-        text: 'DELETE FROM posts WHERE id = $1",
-        values: [postid]
-    };
+  const query = {
+    text: 'DELETE FROM posts WHERE id = $1',
+    values: [postid],
+  };
 
-    try {
-        await db.query(query);
-    } catch (err) {
-        return res.status(400).json({ message: 'post delete failed.' });
-    }
-    return res.status(200).json({ message: 'post delete success' });
-}
+  try {
+    await db.query(query);
+  } catch (err) {
+    return res.status(400).json({ message: 'post delete failed.' });
+  }
+  return res.status(200).json({ message: 'post delete success' });
+});
 
 /* React routing */
 app.use('*', (req, res) => {
