@@ -36,7 +36,7 @@ app.post('/api/signup', async (req, res, next) => {
 
   const query = {
     text: 'SELECT * FROM users WHERE id = $1',
-    values: [id],
+    values: [id]
   };
   const result = await db.query(query);
 
