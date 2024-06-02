@@ -5,8 +5,9 @@ import useProjectStore from '../store/useProjectStore';
 const Container = styled.div`
   text-align: left;
   margin: 5px;
-  margin-top: 30px;
+  margin-top: 20px;
   font-size: 16px;
+  width: 90%;
 `;
 
 export default function ProjectDetails() {
@@ -16,5 +17,13 @@ export default function ProjectDetails() {
     return null;
   }
 
-  return <Container>{projectData.post_text}</Container>;
+  const paragraphs = projectData.post_text.split('\n');
+
+  return (
+    <Container>
+      {paragraphs.map((paragraph, index) => (
+        <p key={index}>{paragraph}</p>
+      ))}
+    </Container>
+  );
 }

@@ -101,7 +101,7 @@ const ProjectSummaryWrapper = styled.div`
   display: flex;
   justify-content: center;
   background-color: #eeeeee;
-  height: 340px;
+  height: 330px;
   width: 100vw;
 `;
 

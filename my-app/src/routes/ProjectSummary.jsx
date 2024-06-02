@@ -82,9 +82,9 @@ export default function ProjectSummary() {
     projectData.front_req + projectData.back_req + projectData.design_req;
 
   const positions = [];
-  if(projectData.front_req > 0) positions.push('Front-end');
-  if(projectData.back_req > 0) positions.push('Back-end');
-  if(projectData.design_req > 0) positions.push('Designer');
+  if (projectData.front_req > 0) positions.push('Front-end');
+  if (projectData.back_req > 0) positions.push('Back-end');
+  if (projectData.design_req > 0) positions.push('Designer');
 
   const startDate = projectData.startdate.split('T')[0];
   const endDate = projectData.enddate.split('T')[0];
