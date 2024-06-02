@@ -18,7 +18,7 @@ function Portfolio() {
   useEffect(() => {
     const fetchPortfolio = async () => {
       try {
-        const response = await axios.post(`/api/portfolio`);
+        const response = await axios.post(`/api/portfolio`,{ withCredentials: true });
         console.log(response.data);
         setPosition(response.data.position);
         setDescription(response.data.profile);
@@ -27,7 +27,7 @@ function Portfolio() {
       }
     };
     fetchPortfolio();
-  }, []);
+  }, []); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,6 +38,7 @@ function Portfolio() {
           position: position,
           profile_text: description,
         },
+        { withCredentials: true },
         console.log(position, description)
       );
       alert("Portfolio saved successfully");

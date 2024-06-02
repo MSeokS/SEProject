@@ -85,7 +85,7 @@ const Header = styled.div`
   align-items: center;
   justify-items: center;
   justify-content: center;
-  gap: 25px;
+  // gap: 25px;
   background-color: #0e442a;
   color: white;
   width: 100vw;

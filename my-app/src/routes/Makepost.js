@@ -58,18 +58,20 @@ const Title = styled.h1`
 const Container_posting = styled.div`
   display: flex;
   flex-direction: column;
+  height: 100vh;
   align-items: center;
-  text-align: center;
-  margin-left: 24px;
-  margin-right: 24px;
-  overflow: scroll;
-  padding-bottom: 90px;
+  // text-align: center;
+  // margin-left: 24px;
+  // margin-right: 24px;
+  // overflow: scroll;
+  // padding-bottom: 90px;
 `;
 
 const Inputbox_posting = styled.div`
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   background: rgba(238, 238, 238, 1);
   border-radius: 8px;
   width: 240px;
@@ -82,6 +84,7 @@ const Inputbox_posting = styled.div`
 const Inputbox_posting_detail = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   background: rgba(238, 238, 238, 1);
   border-radius: 8px;
   width: 240px;
@@ -91,28 +94,10 @@ const Inputbox_posting_detail = styled.div`
   border: none;
 `;
 
-// const BackButton = styled.button`
-//   background-color: transparent;
-//   cursor: pointer;
-//   margin: 10px;
-//   margin-left: 20px;
-//   padding: 10px 20px;
-//   border: none;
-//   color: white;
-//   background-image: url(${arrowLeftIcon});
-//   background-size: contain;
-//   background-repeat: no-repeat;
-//   background-position: center;
-// `;
-
-// const Box_in_box = styled.input`
-//     background: rgba(238, 238, 238, 1);
-//     border-radius: 5px;
-//     width: 240px;
-//     height: 36px;
-//     margin: 7px;
-//     border: none;
-// `;
+const Label = styled.label`
+  align-self: flex-start;
+  font-size: small;
+`;
 
 const Makepost = () => {
   const navigate = useNavigate();
@@ -129,7 +114,7 @@ const Makepost = () => {
 
   const [showPopup, setShowPopup] = useState(false);
 
-  const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져오거나, 토큰이 없는 경우 빈 문자열을 사용합니다.
+  const token = localStorage.getItem('token');
 
   const [selectedStacks, setSelectedStacks] = useState([]);
 
@@ -156,9 +141,9 @@ const Makepost = () => {
     try {
       const response = await axios.post('/api/posting', updatedForm, {
         headers: {
-          Authorization: `Bearer ${token}`, // 헤더에 토큰을 추가합니다.
+          Authorization: `Bearer ${token}`,
         },
-      });
+      },{ withCredentials: true });
       if (response.status === 200) {
         alert('게시물이 작성되었습니다.');
         navigate('/main');
@@ -324,10 +309,12 @@ const Makepost = () => {
           />
         </Inputbox_posting>
         <Inputbox_posting_detail>
-          <label className="posting_label">Project Detail</label>
+          <Label>Project Detail</Label>
           <textarea
             style={{
-              height: '150px',
+              height: '160px',
+              padding: '10px',
+              boxSizing: 'border-box',
             }}
             className="Box_in_box"
             type="text"
@@ -339,10 +326,11 @@ const Makepost = () => {
         </Inputbox_posting_detail>
 
         <div className="button">
-          <button type="submit" id="posting_btn">
+          <button type="submit" id="posting_btn" style={{ fontWeight: 'bold' }}>
             {/* fortest */}
             {/* <Link style ={{color: '#000000', textDecoration:'none' }} to="/Main">Make Post</Link> */}
             {console.log(form)}
+            Make Post
           </button>
         </div>
       </form>

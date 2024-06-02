@@ -39,7 +39,7 @@ const SignUp = () => {
     
 
     try {
-      const response = await axios.post('/api/signup', form);
+      const response = await axios.post('/api/signup', form , { withCredentials: true });
       if (response.status === 200) {
 
         alert('회원가입이 완료되었습니다.');

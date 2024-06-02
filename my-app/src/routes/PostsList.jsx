@@ -11,9 +11,6 @@ function PostsList() {
   const [posts, setPosts] = useState([]);
 
   const navigate = useNavigate();
-  const handleCardClick = () => {
-    navigate("/applicationList");
-  };
 
   const goBackToProfile = () => {
     navigate("/profile");
@@ -22,7 +19,7 @@ function PostsList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.post("/api/mypost");
+        const response = await axios.post("/api/mypost", { withCredentials: true });
         console.log(response.data);
         setPosts(response.data);
       } catch (error) {
@@ -40,7 +37,7 @@ function PostsList() {
       </Header>
       <Title>My Post</Title>
       {posts.map((post, index) => (
-        <PostCardWrapper key={index} onClick={handleCardClick}>
+        <PostCardWrapper key={index}>
           <PostCard {...post} />
         </PostCardWrapper>
       ))}

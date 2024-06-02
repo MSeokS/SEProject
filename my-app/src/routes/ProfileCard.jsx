@@ -86,7 +86,7 @@ export default function ProfileCard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post("/api/profile");
+        const response = await axios.post("/api/profile",{ withCredentials: true });
         console.log(response.data);
         setProfileInfo(response.data);
       } catch (error) {

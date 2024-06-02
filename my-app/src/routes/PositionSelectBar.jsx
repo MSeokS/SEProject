@@ -169,6 +169,7 @@ export default function PositionSelectBar() {
             .then((response) => {
               if (response.status === 200) {
                 console.log('Scrab request submitted successfully!');
+                setHeartClicked(true);
               }
             })
             .catch((error) => {

@@ -12,7 +12,7 @@ function AccountInformation() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const response = await axios.post(`api/account`);
+        const response = await axios.post(`api/account`, { withCredentials: true });
         console.log(response.data);
         setUserInfo(response.data);
       } catch (error) {
@@ -33,7 +33,7 @@ function AccountInformation() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/save", userInfo);
+      await axios.post("/api/save", userInfo, { withCredentials: true });
       alert("Information Saved!");
     } catch (error) {
       console.error("Failed to save user info", error);

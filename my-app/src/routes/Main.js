@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import './Login.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +11,6 @@ import TechStackPopup from './components/TechStackPopup';
 import TechStackPopup1 from './components/TechStackPopup1';
 import TechStackPopup2 from './components/TechStackPopup2';
 import useProjectStore from '../store/useProjectStore';
-import DummyMain from './DummyMain';
 
 const Header = styled.div`
   display: flex;
@@ -138,22 +136,25 @@ const ContentWrapper = styled.div`
   padding-bottom: 68px;
 `;
 
+const MessageDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 343px;
+  height: 85%;
+  background: rgba(196, 196, 196, 0.2);
+  border-radius: 20px;
+  margin: 20px;
+  margin-top: 10px;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #333;
+  box-sizing: border-box;
+`;
+
 const Main = () => {
-  // const posts = [
-  //     {
-  //       title: "SKKU Application",
-  //       location: "Suwon",
-  //       description:
-  //         "We are recruiting developers and designers to join our side project.",
-  //       roles: ["Front-end", "Back-end", "Designer"],
-  //       recruitingInfo: "Recruiting 1/7",
-  //     },
-
-  //     // 추가 게시물 정보를 여기에 포함할 수 있습니다.
-  //   ];
-
-  // 추가 게시물 정보를 여기에 포함할 수 있습니다.
-
   const navigate = useNavigate();
 
   const { setSelectedProjectId } = useProjectStore();
@@ -212,7 +213,7 @@ const Main = () => {
 
     try {
       setPosts([]);
-      const response = await axios.post('/api/search', updatedForm);
+      const response = await axios.post('/api/search', updatedForm , { withCredentials: true });
       // response.data를 posts 상태에 저장합니다.
       setPosts(response.data);
       setForm([]);
@@ -298,7 +299,12 @@ const Main = () => {
 
       {console.log('form:', form)}
       <ContentWrapper>
-        {!isFindClicked && <DummyMain />}
+        {!isFindClicked && (
+          <MessageDiv>
+            Search for the project <br />
+            you want to find.
+          </MessageDiv>
+        )}
         {posts.map((post, index) => (
           <PostCardWrapper key={index} onClick={() => handleCardClick(post.id)}>
             <PostCard

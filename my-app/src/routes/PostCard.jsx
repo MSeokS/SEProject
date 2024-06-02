@@ -1,5 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useState, useEffect } from "react";
+
 // Edit, Delete, Close 버튼을 추가하고, PostCard 컴포넌트를 완성하세요.
 function PostCard({
   projectname,
@@ -8,11 +12,41 @@ function PostCard({
   front_req,
   back_req,
   design_req,
+  id,
+  userid,
 }) {
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate("/applicationList");
+  };
+
+  const handleClose = () => {
+    console.log("Close post with id:", id);
+    console.log("User id:", userid);
+
+    const fetchClosePosts = async () => {
+      try {
+        const response = await axios.post("/api/postend", {
+          // id: userid,
+          postid: id,
+        },{ withCredentials: true });
+        console.log(response.data);
+
+        if (response.data.message === "post end success.") {
+          console.log(`Post with id ${id} has been closed.`);
+        }
+      } catch (error) {
+        console.error("Failed to fetch posts", error);
+      }
+    };
+    fetchClosePosts();
+  };
+
   return (
     <PostCardContainer>
       <Header>
-        <Title>{projectname}</Title>
+        <Title onClick={handleCardClick}>{projectname}</Title>
         <Location>{location}</Location>
       </Header>
       <Description>{post_text}</Description>
@@ -22,7 +56,7 @@ function PostCard({
         {design_req > 0 && <RoleButton>Designer: {design_req}</RoleButton>}
       </Roles>
       <Actions>
-        <CloseButton>Close</CloseButton>
+        <CloseButton onClick={handleClose}>Close</CloseButton>
         <DeleteButton>Delete</DeleteButton>
       </Actions>
     </PostCardContainer>
