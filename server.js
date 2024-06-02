@@ -503,6 +503,23 @@ app.post('/api/apply_portfolio', auth, async (req, res) => {
   }
 });
 
+app.post('/api/postend', auth, async (req, res) => {
+    const {id, postid} = req.body;
+
+    const query = {
+        text: 'UPDATE posts SET isEnd = true WHERE id = $1',
+        values: [postid]
+    };
+    try {
+        await db.query(postid);
+    } catch (err) {
+        console.log(err);
+        return res.status(400).json({ message : 'post end failed.' });
+    }
+
+    return res.status(400).json({ message: 'post end success.' });
+
+}
 /* React routing */
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/my-app/build/index.html'));
