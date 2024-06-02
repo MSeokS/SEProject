@@ -1,0 +1,32 @@
+.Box_in_box{
+    background: rgba(0, 0, 0, 0);
+    border-radius: 5px;
+    width: 240px;
+    height: 36px;
+    margin: 7px;
+    border: none;
+}
+
+.posting_label{
+    width: 150px; /* Adjust this value as needed */
+    display: inline-block;
+    font-size: small;
+    overflow:auto
+    
+}
+
+.select .Box_in_box option:first-child {
+    display: none;
+
+  }
+
+#posting_btn{
+    /* stack */
+width: 95%;
+height: 49px;   
+
+background: #63A972;
+border-radius: 40px;
+
+}
+

@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/static/css/main.ddda6a92.css",
+    "main.js": "/static/js/main.6a88ed6c.js",
+    "static/media/skku_symbol.jpg": "/static/media/skku_symbol.3918192e2bdeac6d1779.jpg",
+    "static/media/red-hearts-icon.png": "/static/media/red-hearts-icon.4dabba7bad7ff5aaf177.png",
+    "static/media/empty-hearts-icon.svg": "/static/media/empty-hearts-icon.49dedcb81830ea2c1e1c86d54db7a72f.svg",
+    "static/media/arrow-left-icon.svg": "/static/media/arrow-left-icon.f08d6d6e2c0cd17a2ae30bec1d687a66.svg",
+    "static/media/arrow-down-icon.svg": "/static/media/arrow-down-icon.ebb0c31384e1d22788525d6ba11118cc.svg",
+    "static/media/arrow-up-icon.svg": "/static/media/arrow-up-icon.586c34a6cb8aeee632c85f89adc61637.svg",
+    "index.html": "/index.html",
+    "main.ddda6a92.css.map": "/static/css/main.ddda6a92.css.map",
+    "main.6a88ed6c.js.map": "/static/js/main.6a88ed6c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ddda6a92.css",
+    "static/js/main.6a88ed6c.js"
+  ]
+}

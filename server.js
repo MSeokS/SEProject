@@ -428,7 +428,7 @@ app.post('/api/save_portfolio', auth, async (req, res) => {
   try {
     const query_result = await db.query(query);
 
-    res.status(400).json({ message: 'save_portfolio success' });
+    res.status(200).json({ message: 'save_portfolio success' });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'save_portfolio failed' });
@@ -517,7 +517,7 @@ app.post('/api/postend', auth, async (req, res) => {
         return res.status(400).json({ message : 'post end failed.' });
     }
 
-    return res.status(400).json({ message: 'post end success.' });
+    return res.status(200).json({ message: 'post end success.' });
 
 });
 
