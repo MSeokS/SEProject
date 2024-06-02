@@ -151,7 +151,7 @@ app.post('/api/post', auth, async (req, res) => {
   };
   isAttend = await db.query(query2);
 
-  result.rows[0].isAttend = isAttend.rows.length > 0;
+  result.rows[0].isAttend = (isAttend.rows.length > 0) || (result.rows[0].userid == id);
 
   return res.status(200).json(result.rows[0]);
 });
@@ -272,6 +272,7 @@ app.post('/api/posting', auth, async (req, res) => {
       ],
     };
     await db.query(query);
+
     return res.status(200).json({ message: 'posting success' });
   } catch (err) {
     return res.status(400).json({ message: 'posting failed' });
