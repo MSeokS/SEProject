@@ -4,6 +4,8 @@ const cors = require('cors');
 const path = require('path');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const fs = require('fs');
+const https = require('https');
 const { parse } = require('date-fns');
 
 /* User Modules */
@@ -13,6 +15,11 @@ const { login, auth } = require('./modules/JWTauth');
 /* express config */
 const app = express();
 const port = 3000;
+const options = {
+    key: fs.readFileSync('./lesstif.com.key'),
+    cert: fs.readFileSync('./lesstif.com.crt'),
+    ca: fs.readFileSync('./lesstif-rootca.crt')
+}
 
 app.use(
   cors({
@@ -86,6 +93,7 @@ app.post('/api/signin', async (req, res) => {
           maxAge: 30 * 60 * 1000,
           httpOnly: false,
           sameSite: 'None',
+          secure: true,
         });
         return res
           .status(200)
@@ -543,6 +551,6 @@ app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/my-app/build/index.html'));
 });
 
-app.listen(port, () => {
+https.createServer(options, app).listen(port, () => {
   console.log('app listening on port ', port);
 });
