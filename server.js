@@ -63,8 +63,9 @@ app.post('/api/signup', async (req, res) => {
 });
 
 /* SignIn */
-app.post('/api/signin', async (req, res) => {
-  const { id, password } = req.body;
+app.get('/api/signin', async (req, res) => {
+  const id = req.query.id;
+  const password = req.query.password;
 
   const query = {
     text: 'SELECT * FROM users WHERE id = $1 AND password = $2',
