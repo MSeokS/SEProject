@@ -299,7 +299,7 @@ app.post('/api/profile', auth, async (req, res) => {
     // console.log(Math.round((score / (scores.total * 4)).toFixed(1)));
     if (scores.total == 0) {
         evaluate = 50;
-    } else const evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
+    } else evaluate = Math.round((score / (scores.total * 4)).toFixed(1));
 
     // console.log(evaluate);
 
