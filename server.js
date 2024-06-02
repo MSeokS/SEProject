@@ -519,7 +519,8 @@ app.post('/api/postend', auth, async (req, res) => {
 
     return res.status(400).json({ message: 'post end success.' });
 
-}
+});
+
 /* React routing */
 app.use('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/my-app/build/index.html'));
