@@ -64,7 +64,7 @@ app.post('/api/signup', async (req, res) => {
 
 /* SignIn */
 app.post('/api/signin', async (req, res) => {
-  const {id, password} = req.body;
+  const { id, password } = req.body;
 
   const query = {
     text: 'SELECT * FROM users WHERE id = $1 AND password = $2',
@@ -182,7 +182,7 @@ app.post('/api/apply', auth, async (req, res) => {
     text: 'INSERT INTO apply_post VALUES ($1, $2)',
     values: [id, postid],
   };
-/*  await db.query(query2);
+  /*  await db.query(query2);
 
   switch (position) {
     case 'Front-end':
@@ -210,7 +210,6 @@ app.post('/api/apply', auth, async (req, res) => {
   await db.query(query3);
 */
   return res.status(200).json({ message: 'apply success.' });
-
 });
 
 /* Evaluate submit */
@@ -297,6 +296,10 @@ app.post('/api/scrab_post', auth, async (req, res) => {
       postsId.push(post.postid);
     });
 
+    if (postsId.length == 0) {
+      res.status(200).json({ posts: null });
+    }
+
     const ids = postsId.map(String).join(', ');
     const query2 = {
       text: `SELECT * FROM posts WHERE id IN (${ids})`,
@@ -332,14 +335,12 @@ app.post('/api/profile', auth, async (req, res) => {
 
     // console.log(evaluate);
 
-    res
-      .status(200)
-      .json({
-        username: scores.username,
-        id: id,
-        department: scores.department,
-        evaluate_average: evaluate,
-      });
+    res.status(200).json({
+      username: scores.username,
+      id: id,
+      department: scores.department,
+      evaluate_average: evaluate,
+    });
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: 'profile failed' });
@@ -504,21 +505,20 @@ app.post('/api/apply_portfolio', auth, async (req, res) => {
 });
 
 app.post('/api/postend', auth, async (req, res) => {
-    const {id, postid} = req.body;
+  const { id, postid } = req.body;
 
-    const query = {
-        text: 'UPDATE posts SET isEnd = true WHERE id = $1',
-        values: [postid]
-    };
-    try {
-        await db.query(postid);
-    } catch (err) {
-        console.log(err);
-        return res.status(400).json({ message : 'post end failed.' });
-    }
+  const query = {
+    text: 'UPDATE posts SET isEnd = true WHERE id = $1',
+    values: [postid],
+  };
+  try {
+    await db.query(postid);
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ message: 'post end failed.' });
+  }
 
-    return res.status(200).json({ message: 'post end success.' });
-
+  return res.status(200).json({ message: 'post end success.' });
 });
 
 /* React routing */
