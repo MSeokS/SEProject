@@ -66,8 +66,6 @@ export default function TeamMemberList() {
   const navigate = useNavigate();
   const [fetched, setFetched] = useState(false);
 
-  const [fetched, setFetched] = useState(false);
-
   useEffect(() => {
     if (selectedProjectId) {
       fetchTeamMembers(selectedProjectId);

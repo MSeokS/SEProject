@@ -134,7 +134,7 @@ export default function TeamMemberEvaluation() {
 
   const handleSubmit = () => {
     const payload = {
-      userid: selectedMember.userid,
+      userid: selectedMember.id,
       perform: ratings.performance,
       commute: ratings.communication,
       prepare: ratings.preparation,
