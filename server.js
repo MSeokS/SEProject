@@ -63,9 +63,8 @@ app.post('/api/signup', async (req, res) => {
 });
 
 /* SignIn */
-app.get('/api/signin', async (req, res) => {
-  const id = req.query.id;
-  const password = req.query.password;
+app.post('/api/signin', async (req, res) => {
+  const {id, password} = req.body;
 
   const query = {
     text: 'SELECT * FROM users WHERE id = $1 AND password = $2',
@@ -86,7 +85,6 @@ app.get('/api/signin', async (req, res) => {
         res.cookie('user', token, {
           maxAge: 30 * 60 * 1000,
           httpOnly: false,
-          secure: true,
           sameSite: 'None',
         });
         return res
