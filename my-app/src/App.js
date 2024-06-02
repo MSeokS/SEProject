@@ -43,19 +43,33 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Loginpic />} />
-        <Route path="/profilePage" element={<ProfilePage />} />
+        {/* <Route path="/profilePage" element={<ProfilePage />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
-        {/* <Route path="/signup" element={
-          <PrivateRoute>
-            <SignUp />
-        </PrivateRoute>
-        } /> */}
-        <Route path="/makepost" element={<Makepost />} />
-        <Route path="/main" element={<Main />} />
+        
 
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/makepost" element={
+          <PrivateRoute>
+            <Makepost />
+        </PrivateRoute>
+        } />
+        
+
+        {/* <Route path="/main" element={<Main />} /> */}
+        <Route path="/main" element={
+          <PrivateRoute>
+            <Main />
+        </PrivateRoute>
+        } />
+
+        {/* <Route path="/profile" element={<ProfilePage />} /> */}
+        <Route path="/profile" element={
+          <PrivateRoute>
+            <ProfilePage />
+        </PrivateRoute>
+        } />
+
+        {/* <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/posts" element={<PostsList />} />
         <Route path="/applicationList" element={<ApplicationList />} />
         <Route path="/accountInformation" element={<AccountInformation />} />
@@ -69,7 +83,60 @@ const App = () => {
           path="/evaluation/:memberId"
           element={<TeamMemberEvaluation />}
         />
-        <Route path="/scrab" element={<Scrab />} />
+        <Route path="/scrab" element={<Scrab />} /> */}
+        <Route path="/portfolio" element={
+          <PrivateRoute>
+            <Portfolio />
+          </PrivateRoute>
+        } />
+
+        <Route path="/posts" element={
+          <PrivateRoute>
+            <PostsList />
+          </PrivateRoute>
+        } />
+
+        <Route path="/applicationList" element={
+          <PrivateRoute>
+            <ApplicationList />
+          </PrivateRoute>
+        } />
+
+        <Route path="/accountInformation" element={
+          <PrivateRoute>
+            <AccountInformation />
+          </PrivateRoute>
+        } />
+
+        <Route path="/applicationPort" element={
+          <PrivateRoute>
+            <ApplicationPort />
+          </PrivateRoute>
+        } />
+
+        <Route path="/project-description" element={
+          <PrivateRoute>
+            <ProjectDescription projectId={projectId} />
+          </PrivateRoute>
+        } />
+
+        <Route path="/evaluation" element={
+          <PrivateRoute>
+            <TeamEvaluation />
+          </PrivateRoute>
+        } />
+
+        <Route path="/evaluation/:memberId" element={
+          <PrivateRoute>
+            <TeamMemberEvaluation />
+          </PrivateRoute>
+        } />
+
+        <Route path="/scrab" element={
+          <PrivateRoute>
+            <Scrab />
+          </PrivateRoute>
+        } />
       </Routes>
     </Router>
   );

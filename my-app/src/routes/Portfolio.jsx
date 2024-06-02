@@ -86,12 +86,11 @@ const Header = styled.div`
   align-items: center;
   justify-items: center;
   justify-content: center;
-  gap: 25px;
   background-color: #0e442a;
   color: white;
   width: 100vw;
-  height: 50px;
-  padding: 10px 20px;
+  height: 80px;
+  
 `;
 
 const Header_name = styled.h1`
@@ -108,6 +107,7 @@ const Header_name = styled.h1`
 const StyledArrow = styled(FaArrowLeft)`
   font-size: 20px;
   color: white;
+  margin-left: 20px;
 `;
 
 const Title = styled.h1`

@@ -16,7 +16,7 @@ const Header = styled.div`
   background-color: #0e442a;
   color: white;
   width: 100vw;
-  height: 50px;
+  height: 80px;
 `;
 
 const BackButton = styled.button`
@@ -63,8 +63,8 @@ const Container_posting = styled.div`
   // text-align: center;
   // margin-left: 24px;
   // margin-right: 24px;
-  // overflow: scroll;
-  // padding-bottom: 90px;
+  overflow: scroll;
+  padding-bottom: 90px;
 `;
 
 const Inputbox_posting = styled.div`
@@ -139,11 +139,16 @@ const Makepost = () => {
     const updatedForm = { ...form, stack: sum };
     console.log('updatedForm:', updatedForm);
     try {
-      const response = await axios.post('/api/posting', updatedForm, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        '/api/posting',
+        updatedForm,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },{ withCredentials: true });
+        { withCredentials: true }
+      );
       if (response.status === 200) {
         alert('게시물이 작성되었습니다.');
         navigate('/main');
@@ -155,7 +160,7 @@ const Makepost = () => {
       console.log('response:', response.data);
     } catch (error) {
       console.log('failed to make post:', error);
-      navigate('Main');
+      navigate('/main');
     }
     console.log('게시물 정보:', form);
   };

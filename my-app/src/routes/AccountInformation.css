@@ -1,5 +1,7 @@
 .form-group {
   margin-bottom: 15px;
+  display: flex;
+  align-items: center;
 }
 
 .account-information label {

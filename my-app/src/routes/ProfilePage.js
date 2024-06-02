@@ -89,8 +89,8 @@ const Header = styled.div`
   background-color: #0e442a;
   color: white;
   width: 100vw;
-  height: 50px;
-  padding: 10px 10px;
+  height: 80px;
+  
 `;
 
 const Header_name = styled.h1`

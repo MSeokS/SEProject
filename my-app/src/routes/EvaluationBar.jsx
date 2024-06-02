@@ -1,13 +1,23 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 
-export default function EvaluationBar() {
+const EvaluationBar = ({ profileInfo }) => {
   return (
     <div>
-      <ProgressBar value={80} min={0} max={100}></ProgressBar>
+      <ProgressBar
+        value={profileInfo.evaluate_average}
+        min={0}
+        max={100}></ProgressBar>
     </div>
   );
-}
+};
+
+EvaluationBar.propTypes = {
+  profileInfo: PropTypes.object.isRequired, // profileInfo의 타입을 객체로 지정
+};
+
+export default EvaluationBar;
 
 const ProgressBar = styled.progress`
   width: 100%;

@@ -78,12 +78,13 @@ const Header = styled.div`
   align-items: center;
   justify-items: center;
   justify-content: center;
-  gap: 25px;
   background-color: #0e442a;
   color: white;
-  width: 393px;
-  height: 50px;
-  padding: 10px 20px;
+  width: 100vw;
+  height: 80px;
+  // padding: 10px 20px;
+  padding - bottom : 10px;
+  padding - top : 10px;
 `;
 
 

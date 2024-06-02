@@ -50,66 +50,71 @@ function AccountInformation() {
   return (
     <div className="account-information">
       <Header>
-        <StyledArrow onClick={goBackToProfile} />
+        <StyledArrow onClick={goBackToProfile}  />
         <Header_name>SKKU Recruit</Header_name>
       </Header>
       <Title>Account Information</Title>
       <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <FormGroup>
           <Label>
             Username
+            </Label>
             <InputAccountInfo
               type="text"
               name="username"
               value={userInfo.username}
               onChange={handleChange}
             />
-          </Label>
-        </div>
-        <div className="form-group">
+        
+        </FormGroup>
+        <FormGroup>
           <Label>
             ID (Student ID)
+            </Label>
             <InputAccountInfo
               type="text"
               name="studentId"
               value={userInfo.id}
               onChange={handleChange}
             />
-          </Label>
-        </div>
-        <div className="form-group">
+          
+        </FormGroup>
+        <FormGroup>
           <Label>
             Password
+            </Label>
             <InputAccountInfo
               type="password"
               name="password"
               value={userInfo.password}
               onChange={handleChange}
             />
-          </Label>
-        </div>
-        <div className="form-group">
+        
+        </FormGroup>
+        <FormGroup>
           <Label>
             Phone number
+            </Label>
             <InputAccountInfo
               type="text"
               name="phone"
               value={userInfo.phone}
               onChange={handleChange}
             />
-          </Label>
-        </div>
-        <div className="form-group">
+        
+        </FormGroup>
+        <FormGroup>
           <Label>
             Department
+            </Label>
             <InputAccountInfo
               type="text"
               name="department"
               value={userInfo.department}
               onChange={handleChange}
             />
-          </Label>
-        </div>
+          
+        </FormGroup>
         <AccountChangeButton type="submit" onClick={handleSubmit}>
           Save
         </AccountChangeButton>
@@ -120,6 +125,12 @@ function AccountInformation() {
 }
 
 export default AccountInformation;
+const FormGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 100%;  // 필요한 경우 추가
+`;
 
 const Header = styled.div`
   display: flex;
@@ -130,8 +141,7 @@ const Header = styled.div`
   background-color: #0e442a;
   color: white;
   width: 100vw;
-  height: 50px;
-  padding: 10px 20px;
+  height: 80px;
 `;
 
 const Header_name = styled.h1`
@@ -152,16 +162,23 @@ const Title = styled.h1`
   margin-left: 20px;
 `;
 
+
 const InputAccountInfo = styled.input`
-  width: 50%;
+  flex: 1;
   padding: 10px;
-  margin: 10px 10px 20px 20px;
+  margin-right: 50px;
   border: 1px solid #ccc;
   border-radius: 4px;
 `;
 
 const Label = styled.label`
+  width: 150px;
+
+  text-align: left;
   margin-left: 20px;
+  margin-right: 10px;
+  padding 10px;
+
 `;
 
 const AccountChangeButton = styled.button`
@@ -187,6 +204,7 @@ const AccountChangeButton = styled.button`
 const StyledArrow = styled(FaArrowLeft)`
   font-size: 20px;
   color: white;
+  margin-left: 20px;
 `;
 
 const BackButton = styled.button`

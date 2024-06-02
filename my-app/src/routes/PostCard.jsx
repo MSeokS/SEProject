@@ -1,8 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import React from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import useProjectStore from '../store/useProjectStore';
 
 // Edit, Delete, Close 버튼을 추가하고, PostCard 컴포넌트를 완성하세요.
 function PostCard({
@@ -16,31 +17,59 @@ function PostCard({
   userid,
 }) {
   const navigate = useNavigate();
+  const { setSelectedProjectId } = useProjectStore();
 
   const handleCardClick = () => {
-    navigate("/applicationList");
+    setSelectedProjectId(id);
+    navigate('/applicationList');
   };
 
   const handleClose = () => {
-    console.log("Close post with id:", id);
-    console.log("User id:", userid);
+    console.log('Close post with id:', id);
+    console.log('User id:', userid);
 
     const fetchClosePosts = async () => {
       try {
-        const response = await axios.post("/api/postend", {
-          // id: userid,
-          postid: id,
-        },{ withCredentials: true });
+        const response = await axios.post(
+          '/api/postend',
+          {
+            // id: userid,
+            postid: id,
+          },
+          { withCredentials: true }
+        );
         console.log(response.data);
 
-        if (response.data.message === "post end success.") {
+        if (response.data.message === 'post end success.') {
           console.log(`Post with id ${id} has been closed.`);
+        }
+      } catch (error) {
+        console.error('Failed to fetch posts', error);
+      }
+    };
+    fetchClosePosts();
+  };
+
+  const handleDelete = () => {
+    console.log("Delete post with id:", id);
+    console.log("User id:", userid);
+
+    const fetchDeletePosts = async () => {
+      try {
+        const response = await axios.post("/api/postdelete", {
+          // id: userid,
+          postid: id,
+        });
+        console.log(response.data);
+
+        if (response.data.message === "post delete success.") {
+          console.log(`Post with id ${id} has been deleted.`);
         }
       } catch (error) {
         console.error("Failed to fetch posts", error);
       }
     };
-    fetchClosePosts();
+    fetchDeletePosts();
   };
 
   return (
@@ -57,7 +86,7 @@ function PostCard({
       </Roles>
       <Actions>
         <CloseButton onClick={handleClose}>Close</CloseButton>
-        <DeleteButton>Delete</DeleteButton>
+        <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
       </Actions>
     </PostCardContainer>
   );

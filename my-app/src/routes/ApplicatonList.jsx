@@ -1,40 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import TabBar from './TabBar';
 import styled from 'styled-components';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ApplicationCard from './ApplicationCard';
+import useProjectStore from '../store/useProjectStore';
+import axios from 'axios';
 
 function ApplicationList() {
-  const applicants = [
-    {
-      id: 1,
-      name: 'applicant 1',
-      roles: ['Back-end'],
-      phone: '010-1234-1234',
-    },
-    {
-      id: 2,
-      name: 'applicant 2',
-      roles: ['Front-end'],
-      phone: '010-2345-2345',
-    },
-    {
-      id: 3,
-      name: 'applicant 3',
-      roles: ['Designer'],
-      phone: '010-3456-3456',
-    },
-  ];
-  console.log(applicants);
+  // const applicants = [
+  //   {
+  //     id: 1,
+  //     name: 'applicant 1',
+  //     roles: ['Back-end'],
+  //     phone: '010-1234-1234',
+  //   },
+  //   {
+  //     id: 2,
+  //     name: 'applicant 2',
+  //     roles: ['Front-end'],
+  //     phone: '010-2345-2345',
+  //   },
+  //   {
+  //     id: 3,
+  //     name: 'applicant 3',
+  //     roles: ['Designer'],
+  //     phone: '010-3456-3456',
+  //   },
+  // ];
+  // console.log(applicants);
 
-  const navigate = useNavigate(); // useNavigate 훅을 사용해 navigation 기능을 구현
+  const [applicants, setApplicants] = useState([]);
+  const { selectedProjectId } = useProjectStore();
 
-  const handleSubmit = (id) => {
-    const applicant = applicants.find((applicant) => applicant.id === id);
-    alert(`Confirm`);
-  };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchApplicants = async () => {
+      try {
+        const response = await axios.post(
+          '/api/applicant',
+          { postid: selectedProjectId },
+          { withCredentials: true }
+        );
+        console.log('sibal', response.data);
+        setApplicants(response.data);
+      } catch (error) {
+        console.error('Failed to fetch applicants:', error);
+      }
+    };
+
+    fetchApplicants();
+  }, []);
 
   const goBackToPostList = () => {
     navigate('/posts');
@@ -73,12 +91,12 @@ const Header = styled.div`
   align-items: center;
   justify-items: center;
   justify-content: center;
-  gap: 25px;
+  
   background-color: #0e442a;
   color: white;
   width: 100vw;
-  height: 50px;
-  padding: 10px 20px;
+  height: 80px;
+  
 `;
 
 const Header_name = styled.h1`
@@ -95,6 +113,7 @@ const Header_name = styled.h1`
 const StyledArrow = styled(FaArrowLeft)`
   font-size: 20px;
   color: white;
+  margin-left: 20px;
 `;
 
 const Title = styled.h1`

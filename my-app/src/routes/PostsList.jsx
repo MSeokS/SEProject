@@ -1,11 +1,11 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import PostCard from "./PostCard";
-import TabBar from "./TabBar";
-import styled from "styled-components";
-import { FaArrowLeft } from "react-icons/fa";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import PostCard from './PostCard';
+import TabBar from './TabBar';
+import styled from 'styled-components';
+import { FaArrowLeft } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function PostsList() {
   const [posts, setPosts] = useState([]);
@@ -13,17 +13,19 @@ function PostsList() {
   const navigate = useNavigate();
 
   const goBackToProfile = () => {
-    navigate("/profile");
+    navigate('/profile');
   };
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.post("/api/mypost", { withCredentials: true });
+        const response = await axios.post('/api/mypost', {
+          withCredentials: true,
+        });
         console.log(response.data);
         setPosts(response.data);
       } catch (error) {
-        console.error("Failed to fetch posts", error);
+        console.error('Failed to fetch posts', error);
       }
     };
     fetchPosts();
@@ -53,12 +55,10 @@ const Header = styled.div`
   align-items: center;
   justify-items: center;
   justify-content: center;
-  gap: 25px;
   background-color: #0e442a;
   color: white;
   width: 100vw;
-  height: 50px;
-  padding: 10px 20px;
+  height: 80px;
 `;
 
 const Header_name = styled.h1`
@@ -75,6 +75,7 @@ const Header_name = styled.h1`
 const StyledArrow = styled(FaArrowLeft)`
   font-size: 20px;
   color: white;
+  margin-left: 20px;
 `;
 
 const Title = styled.h1`
@@ -91,6 +92,7 @@ const PostList = styled.div`
   background: #ffffff;
   display: flex;
   flex-direction: column;
+  overflow: scroll;
 `;
 
 const PostCardWrapper = styled.div`

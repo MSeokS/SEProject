@@ -86,7 +86,9 @@ export default function ProfileCard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post("/api/profile",{ withCredentials: true });
+        const response = await axios.post("/api/profile", {
+          withCredentials: true,
+        });
         console.log(response.data);
         setProfileInfo(response.data);
       } catch (error) {
@@ -111,7 +113,7 @@ export default function ProfileCard() {
       <div>
         <EvalTitle>Evaluation</EvalTitle>
       </div>
-      <EvaluationBar />
+      <EvaluationBar profileInfo={ProfileInfo} />
     </Card>
   );
 }

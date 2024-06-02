@@ -1,21 +1,49 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function ApplicationCard({ id, name, roles, phone }) {
+
+export default function ApplicationCard({
+  id,
+  username,
+  position,
+  phone,
+  postid,
+}) {
   const navigate = useNavigate();
   const goToApplicationPort = () => {
-    navigate('/applicationPort');
+    navigate("/applicationPort");
+  };
+
+  const submitApplication = () => {
+    alert("conrfirmed");
+  };
+
+  const handleConfirm = async () => {
+    try {
+      const response = await axios.post(
+        '/api/select',
+        { userid: id, postid },
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        alert('Confirmation successful');
+      } else {
+        alert('Confirmation failed');
+      }
+    } catch (error) {
+      console.error('Error confirming applicant:', error);
+      alert('An error occurred during confirmation');
+    }
   };
 
   return (
     <ApplicationCardContainer>
       <Header>
-        <Title>{name}</Title>
+        <Title>{username}</Title>
         <Roles>
-          {roles.map((role, index) => (
-            <RoleP key={index}>{role}</RoleP>
-          ))}
+          <RoleP>{position}</RoleP>
         </Roles>
         <PortButton onClick={goToApplicationPort}>Portfolio &gt;</PortButton>
       </Header>
@@ -24,7 +52,7 @@ export default function ApplicationCard({ id, name, roles, phone }) {
           <PhoneLabel>Phone Number</PhoneLabel>
           <Phone>{phone}</Phone>
         </PhoneWrapper>
-        <ConfirmButton>Confirm</ConfirmButton>
+        <ConfirmButton onClick={handleConfirm}>Confirm</ConfirmButton>
       </Wrapper>
     </ApplicationCardContainer>
   );

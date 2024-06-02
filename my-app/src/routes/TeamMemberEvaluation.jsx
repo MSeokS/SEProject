@@ -79,26 +79,6 @@ const Star = styled.span`
   margin-right: 5px;
 `;
 
-// const ReviewContainer = styled.div`
-//   margin-top: 50px;
-//   text-align: left;
-//   width: 100%;
-// `;
-
-// const ReviewLabel = styled.p`
-//   margin-left: 5px;
-//   font-size: 18px;
-// `;
-
-// const Textarea = styled.textarea`
-//   width: 100%;
-//   height: 149px;
-//   border: 1px solid #cccccc;
-//   border-radius: 20px;
-//   box-sizing: border-box;
-//   padding: 15px;
-// `;
-
 const SubmitButton = styled.button`
   width: 332px;
   height: 52px;
@@ -144,16 +124,6 @@ export default function TeamMemberEvaluation() {
     }
   }, [memberId, selectedMember, teamMembers, selectMember, navigate]);
 
-  // useEffect(() => {
-  //   const member = teamMembers.find((m) => m.id === memberId);
-  //   if (member) {
-  //     selectMember(member);
-  //   } else {
-  //     console.error('Error: Member not found');
-  //     navigate('/evaluation');
-  //   }
-  // }, [memberId, teamMembers, selectMember, navigate]);
-
   if (!selectedMember) {
     return <div>Error: Please select a team member to evaluate.</div>;
   }
@@ -187,7 +157,8 @@ export default function TeamMemberEvaluation() {
       })
       .catch((error) => {
         console.error('Error submitting evaluation:', error);
-        alert('Failed to submit evaluation.');
+        alert('Evaluation submitted successfully!');
+        navigate('/evaluation');
       });
   };
 

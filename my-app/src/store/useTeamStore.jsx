@@ -7,11 +7,17 @@ const useTeamStore = create((set) => ({
 
   fetchTeamMembers: async (postId) => {
     try {
-      const response = await axios.post('/api/end_post', {
-        postid: postId,
-      },{ withCredentials: true });
+      const response = await axios.post(
+        '/api/end_post',
+        {
+          postid: postId,
+        },
+        { withCredentials: true }
+      );
+      console.log('api response: ', response.data);
       set({ teamMembers: response.data });
     } catch (error) {
+      // set({ teamMembers: null });
       console.error('Error fetching team members:', error);
     }
   },

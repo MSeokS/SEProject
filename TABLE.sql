@@ -60,7 +60,7 @@ CREATE TABLE applicant(
     position VARCHAR(50)
 );
 
-CREATE TABLE evalute(
+CREATE TABLE evaluate(
     userid VARCHAR(10) REFERENCES users(id),
     teamid VARCHAR(10) REFERENCES users(id)
 );
