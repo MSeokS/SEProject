@@ -36,31 +36,24 @@ CREATE TABLE posts (
     isEnd Boolean
 );
 
-CREATE TABLE alarms (
-    id SERIAL PRIMARY KEY,
-    userid VARCHAR(10) REFERENCES users(id),
-    posts INT REFERENCES posts(id),
-    types INT,
-    user_param VARCHAR(10)
-);
-
 CREATE TABLE apply_post (
-    userid VARCHAR(10) REFERENCES users(id),
-    postid INT REFERENCES posts(id)
+    userid VARCHAR(10) REFERENCES users(id) ON DELETE CASCADE,
+    postid INT REFERENCES posts(id) ON DELETE CASCADE
 );
 
 CREATE TABLE teams (
-    postid INT REFERENCES posts(id),
-    userid VARCHAR(10) REFERENCES users(id)
+    postid INT REFERENCES posts(id) ON DELETE CASCADE,
+    userid VARCHAR(10) REFERENCES users(id) ON DELETE CASCADE
 );
 
-CREATE TABLE applicant(
-    postid INT REFERENCES posts(id),
-    userid VARCHAR(10) REFERENCES users(id),
+CREATE TABLE applicant (
+    postid INT REFERENCES posts(id) ON DELETE CASCADE,
+    userid VARCHAR(10) REFERENCES users(id) ON DELETE CASCADE,
     position VARCHAR(50)
 );
 
-CREATE TABLE evaluate(
-    userid VARCHAR(10) REFERENCES users(id),
-    teamid VARCHAR(10) REFERENCES users(id)
+CREATE TABLE evaluate (
+    userid VARCHAR(10) REFERENCES users(id) ON DELETE CASCADE,
+    teamid VARCHAR(10) REFERENCES users(id) ON DELETE CASCADE
 );
+

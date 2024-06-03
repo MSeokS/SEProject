@@ -133,7 +133,7 @@ app.post("/api/search", auth, async (req, res) => {
     text:
       "SELECT * FROM posts WHERE " +
       positionStr +
-      " > 0 AND (stack | $1) > 0 AND isEnd = $2",
+      " > 0 AND (stack & $1) > 0 AND isEnd = $2",
     values: [stack, status],
   };
   const result = await db.query(query);
